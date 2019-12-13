@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachineInsideName": {
+            "value": "VMInside"
+        },
+        "virtualMachineOutsideName": {
+            "value": "VMOutside"
+        },
+        "virtualNetworkInsideName": {
+            "value": "vNetInside"
+        },
+        "virtualNetworkOutsideName": {
+            "value": "vNetOutside"
+        },
+        "subnetInsideName": {
+            "value": "subnetInside"
+        },
+        "subnetOutsideName": {
+            "value": "subnetOutside"
+        },
+        "adminUsernameInside": {
+            "value": "asm2782"
+        },
+        "adminUsernameOutside": {
+            "value": "asm2782"
+        },
+        "networkSecurityGroupInsideName": {
+            "value": "vminside-nsg"
+        },
+        "networkSecurityGroupOutsideName": {
+            "value": "vmoutside-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": [
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 300,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                }
+            ]
+        }
+    }
+}
