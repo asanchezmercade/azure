@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachineName": {
+            "value": "VMOutside"
+        },
+        "virtualNetwork": {
+            "value": "vNetOutside"
+        },
+        "subnetName": {
+            "value": "subnetOutside"
+        },
+        "adminUsername": {
+            "value": "asm2782"
+        },
+        "networkSecurityGroupName": {
+            "value": "vmoutside-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": [
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 300,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                }
+            ]
+        }
+    }
+}
