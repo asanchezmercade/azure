@@ -9,10 +9,10 @@
             "value": "VMOutside"
         },
         "virtualNetworkInsideName": {
-            "value": "vNetInside"
+            "value": "VnetInside"
         },
         "virtualNetworkOutsideName": {
-            "value": "vNetOutside"
+            "value": "VnetOutside"
         },
         "subnetInsideName": {
             "value": "subnetInside"

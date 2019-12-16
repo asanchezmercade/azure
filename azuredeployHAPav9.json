@@ -40,7 +40,7 @@
         },
         "adminPasswordOutside": {
             "type": "secureString"
-        }
+        } 
     },
     "variables": {
     },
@@ -60,8 +60,8 @@
                     "contentVersion": "1.0.0.0"
                 }
             }
-        },
-        {
+        }
+        /* {
             "apiVersion": "2016-09-01",
             "name": "VMInsideDeployment",
             "type": "Microsoft.Resources/deployments",
@@ -95,8 +95,8 @@
                     }
                 }
             }
-        },
-        {
+        }, */
+        /* {
             "apiVersion": "2016-09-01",
             "name": "VMOutsideDeployment",
             "type": "Microsoft.Resources/deployments",
@@ -130,6 +130,41 @@
                     }
                 }
             }
-        }
+        } */
+        /* {
+            "apiVersion": "2017-05-10",
+            "name": "FWActiveDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployFW.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualMachineName": {
+                        "value": "[parameters('virtualMachineInsideName')]"
+                    },
+                    "virtualNetwork": {
+                        "value": "[parameters('virtualNetworkInsideName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetInsideName')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsernameInside')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPasswordInside')]"
+                    },
+                    "networkSecurityGroupName": {
+                        "value": "[parameters('networkSecurityGroupInsideName')]"
+                    },
+                    "networkSecurityGroupRules": {
+                        "value": "[parameters('networkSecurityGroupRules')]"
+                    }
+                }
+            }
+        } */
     ]
 }
