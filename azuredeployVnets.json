@@ -2,70 +2,70 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"vnetName": {
+		"vnetTransitName": {
 			"type": "string",
 			"defaultValue": "Transit-Vnet",
 			"metadata": {
 				"description": "VNet name"
 			}
 		},
-		"vnetAddressPrefix": {
+		"vnetTransitAddressPrefix": {
 			"type": "string",
 			"defaultValue": "10.9.0.0/21",
 			"metadata": {
 				"description": "Address prefix"
 			}
 		},
-		"subnet1Prefix": {
+		"subnetMgmtPrefix": {
 			"type": "string",
 			"defaultValue": "10.9.0.0/24",
 			"metadata": {
 				"description": "Subnet 1 Prefix"
 			}
 		},
-		"subnet1Name": {
+		"subnetMgmtName": {
 			"type": "string",
 			"defaultValue": "subnetMgmt",
 			"metadata": {
 				"description": "Subnet 1 Name"
 			}
 		},
-		"subnet2Prefix": {
+		"subnetUntrustedPrefix": {
 			"type": "string",
 			"defaultValue": "10.9.1.0/24",
 			"metadata": {
 				"description": "Subnet 2 Prefix"
 			}
 		},
-		"subnet2Name": {
+		"subnetUntrustedName": {
 			"type": "string",
 			"defaultValue": "subnetUntrusted",
 			"metadata": {
 				"description": "Subnet 2 Name"
 			}
 		},
-		"subnet3Prefix": {
+		"subnetTrustedPrefix": {
 			"type": "string",
 			"defaultValue": "10.9.2.0/24",
 			"metadata": {
 				"description": "Subnet 3 Prefix"
 			}
 		},
-		"subnet3Name": {
+		"subnetTrustedName": {
 			"type": "string",
 			"defaultValue": "subnetTrusted",
 			"metadata": {
 				"description": "Subnet 3 Name"
 			}
 		},
-		"subnet4Prefix": {
+		"subnetHA2Prefix": {
 			"type": "string",
 			"defaultValue": "10.9.5.0/24",
 			"metadata": {
 				"description": "Subnet 4 Prefix"
 			}
 		},
-		"subnet4Name": {
+		"subnetHA2Name": {
 			"type": "string",
 			"defaultValue": "subnetHA2",
 			"metadata": {
@@ -139,10 +139,10 @@
 	"variables": {
 		"routeTableInsideName": "routeTableInside",
 		"routeTableOutsideName": "routeTableOutside",
-		"TransitVnetToVnetInsidePeeringName": "[concat(parameters('vNetName'), '-', parameters('vnetInsideName'))]",
-		"VnetInsideToTransitVnetPeeringName": "[concat(parameters('vNetInsideName'), '-', parameters('vnetName'))]",
-		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vNetName'), '-', parameters('vnetOutsideName'))]",
-		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetName'))]"
+		"TransitVnetToVnetInsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetInsideName'))]",
+		"VnetInsideToTransitVnetPeeringName": "[concat(parameters('vNetInsideName'), '-', parameters('vnetTransitName'))]",
+		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
+		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetTransitName'))]"
 	},
 	"resources": [
 		{
@@ -155,15 +155,15 @@
 					{
 						"name": "toTransit-Vnet",
 						"properties": {
-							"addressPrefix": "[parameters('vnetAddressPrefix')]",
+							"addressPrefix": "[parameters('vnetTransitAddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
 							"nextHopIpAddress": "10.9.2.100"
 						}
 					},
 					{
-						"name": "Default",
+						"name": "tovNetOutside",
 						"properties": {
-							"addressPrefix": "0.0.0.0/0",
+							"addressPrefix": "[parameters('vnetOutsideAddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
 							"nextHopIpAddress": "10.9.2.100"
 						}
@@ -181,15 +181,15 @@
 					{
 						"name": "toTransit-Vnet",
 						"properties": {
-							"addressPrefix": "[parameters('vnetAddressPrefix')]",
+							"addressPrefix": "[parameters('vnetTransitAddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
 							"nextHopIpAddress": "10.9.1.100"
 						}
 					},
 					{
-						"name": "Default",
+						"name": "tovNetInside",
 						"properties": {
-							"addressPrefix": "0.0.0.0/0",
+							"addressPrefix": "[parameters('vnetInsideAddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
 							"nextHopIpAddress": "10.9.1.100"
 						}
@@ -200,37 +200,37 @@
 		{
 			"apiVersion": "2018-10-01",
 			"type": "Microsoft.Network/virtualNetworks",
-			"name": "[parameters('vnetName')]",
+			"name": "[parameters('vnetTransitName')]",
 			"location": "[parameters('location')]",
 			"properties": {
 				"addressSpace": {
 					"addressPrefixes": [
-						"[parameters('vnetAddressPrefix')]"
+						"[parameters('vnetTransitAddressPrefix')]"
 					]
 				},
 				"subnets": [
 					{
-						"name": "[parameters('subnet1Name')]",
+						"name": "[parameters('subnetMgmtName')]",
 						"properties": {
-							"addressPrefix": "[parameters('subnet1Prefix')]"
+							"addressPrefix": "[parameters('subnetMgmtPrefix')]"
 						}
 					},
 					{
-						"name": "[parameters('subnet2Name')]",
+						"name": "[parameters('subnetUntrustedName')]",
 						"properties": {
-							"addressPrefix": "[parameters('subnet2Prefix')]"
+							"addressPrefix": "[parameters('subnetUntrustedPrefix')]"
 						}
 					},
 					{
-						"name": "[parameters('subnet3Name')]",
+						"name": "[parameters('subnetTrustedName')]",
 						"properties": {
-							"addressPrefix": "[parameters('subnet3Prefix')]"
+							"addressPrefix": "[parameters('subnetTrustedPrefix')]"
 						}
 					},
 					{
-						"name": "[parameters('subnet4Name')]",
+						"name": "[parameters('subnetHA2Name')]",
 						"properties": {
-							"addressPrefix": "[parameters('subnet4Prefix')]"
+							"addressPrefix": "[parameters('subnetHA2Prefix')]"
 						}
 					}
 				]
@@ -242,7 +242,7 @@
 					"name": "[variables('TransitVnetToVnetInsidePeeringName')]",
 					"location": "[parameters('location')]",
 					"dependsOn": [
-						"[concat('Microsoft.Network/virtualNetworks/', parameters('vNetName'))]",
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetInsideName'))]"
 					],
 					"comments": "This is the peering from Transit-Vnet 1 to vNetInside",
@@ -258,7 +258,7 @@
 					"name": "[variables('TransitVnetToVnetOutsidePeeringName')]",
 					"location": "[parameters('location')]",
 					"dependsOn": [
-						"[concat('Microsoft.Network/virtualNetworks/', parameters('vNetName'))]",
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetOutsideName'))]"
 					],
 					"comments": "This is the peering from Transit-Vnet 1 to vNetOutside",
@@ -303,13 +303,13 @@
 					"name": "[variables('VnetInsideToTransitVnetPeeringName')]",
 					"location": "[parameters('location')]",
 					"dependsOn": [
-						"[concat('Microsoft.Network/virtualNetworks/', parameters('vNetName'))]",
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetInsideName'))]"
 					],
 					"comments": "This is the peering from vNetInside to Transit-Vnet",
 					"properties": {
 						"remoteVirtualNetwork": {
-							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]"
+							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetTransitName'))]"
 						}
 					}
 				}
@@ -348,13 +348,13 @@
 					"name": "[variables('VnetOutsideToTransitVnetPeeringName')]",
 					"location": "[parameters('location')]",
 					"dependsOn": [
-						"[concat('Microsoft.Network/virtualNetworks/', parameters('vNetName'))]",
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetOutsideName'))]"
 					],
 					"comments": "This is the peering from vNetOutside to Transit-Vnet",
 					"properties": {
 						"remoteVirtualNetwork": {
-							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]"
+							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetTransitName'))]"
 						}
 					}
 				}
