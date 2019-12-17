@@ -133,7 +133,6 @@
 		}
 	},
 	"variables": {
-		"nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]",
 		"TransitVnetToVnetInsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetInsideName'))]",
 		"VnetInsideToTransitVnetPeeringName": "[concat(parameters('vNetInsideName'), '-', parameters('vnetTransitName'))]",
 		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
@@ -219,7 +218,7 @@
 						"properties": {
 							"addressPrefix": "[parameters('subnetMgmtPrefix')]",
 							"networkSecurityGroup": {
-								"id": "[variables('nsgId')]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]"
 							}
 						}
 					},
@@ -301,7 +300,7 @@
 								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableInsideName')]"
 							},
 							"networkSecurityGroup": {
-								"id": "[variables('nsgId')]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]"
 							}
 						}
 					}
@@ -349,7 +348,7 @@
 								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableOutsideName')]"
 							},
 							"networkSecurityGroup": {
-								"id": "[variables('nsgId')]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]"
 							}
 						}
 					}
