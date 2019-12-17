@@ -140,7 +140,24 @@
             "defaultValue": "asm2782"
         },
         "adminPasswordInside": {
-            "type": "secureString"
+            "type": "secureString",
+            "metadata": {
+                "description": "Admin password VMInside"
+            }
+        },
+        "virtualMachineOutsideName": {
+            "type": "string",
+            "defaultValue": "VMOutside"
+        },
+        "adminUsernameOutside": {
+            "type": "string",
+            "defaultValue": "asm2782"
+        },
+        "adminPasswordOutside": {
+            "type": "secureString",
+            "metadata": {
+                "description": "Admin password VMInside"
+            }
         }
     },
     "variables": {
@@ -245,6 +262,36 @@
                     }
                 }
             }
+        },
+        {
+            "apiVersion": "2016-09-01",
+            "name": "VMOutsideDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVM.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualMachineName": {
+                        "value": "[parameters('virtualMachineOutsideName')]"
+                    },
+                    "virtualNetwork": {
+                        "value": "[parameters('vnetOutsideName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetOutsideName')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsernameOutside')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPasswordOutside')]"
+                    }
+                }
+            }
         }
+
     ]
 }
