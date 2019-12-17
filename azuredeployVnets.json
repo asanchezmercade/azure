@@ -302,7 +302,7 @@
 						"properties": {
 							"addressPrefix": "[parameters('subnetInsidePrefix')]",
 							"routeTable": {
-								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableInsideName')]"
+								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableInside')]"
 							},
 							"networkSecurityGroup": {
 								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
@@ -351,7 +351,7 @@
 						"properties": {
 							"addressPrefix": "[parameters('subnetOutsidePrefix')]",
 							"routeTable": {
-								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableOutsideName')]"
+								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableOutside')]"
 							},
 							"networkSecurityGroup": {
 								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
