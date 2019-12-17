@@ -1,0 +1,250 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetTransitName": {
+            "type": "string",
+            "defaultValue": "Transit-Vnet",
+            "metadata": {
+                "description": "Transit VNet name"
+            }
+        },
+        "vnetTransitAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.9.0.0/21",
+            "metadata": {
+                "description": "Transit Address prefix"
+            }
+        },
+        "subnetMgmtPrefix": {
+            "type": "string",
+            "defaultValue": "10.9.0.0/24",
+            "metadata": {
+                "description": "Subnet Mgmt Prefix"
+            }
+        },
+        "subnetMgmtName": {
+            "type": "string",
+            "defaultValue": "subnetMgmt",
+            "metadata": {
+                "description": "Subnet Mgmt Name"
+            }
+        },
+        "subnetUntrustedPrefix": {
+            "type": "string",
+            "defaultValue": "10.9.1.0/24",
+            "metadata": {
+                "description": "Subnet Untrusted Prefix"
+            }
+        },
+        "subnetUntrustedName": {
+            "type": "string",
+            "defaultValue": "subnetUntrusted",
+            "metadata": {
+                "description": "Subnet Untrusted Name"
+            }
+        },
+        "subnetTrustedPrefix": {
+            "type": "string",
+            "defaultValue": "10.9.2.0/24",
+            "metadata": {
+                "description": "Subnet Trusted Prefix"
+            }
+        },
+        "subnetTrustedName": {
+            "type": "string",
+            "defaultValue": "subnetTrusted",
+            "metadata": {
+                "description": "Subnet Trusted Name"
+            }
+        },
+        "subnetHA2Prefix": {
+            "type": "string",
+            "defaultValue": "10.9.5.0/24",
+            "metadata": {
+                "description": "Subnet HA2 Prefix"
+            }
+        },
+        "subnetHA2Name": {
+            "type": "string",
+            "defaultValue": "subnetHA2",
+            "metadata": {
+                "description": "Subnet HA2 Name"
+            }
+        },
+        "vnetOutsideName": {
+            "type": "string",
+            "defaultValue": "VnetOutside",
+            "metadata": {
+                "description": "VNet Outside name"
+            }
+        },
+        "vnetOutsideAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.11.0.0/21",
+            "metadata": {
+                "description": "VNet Outside address prefix"
+            }
+        },
+        "subnetOutsidePrefix": {
+            "type": "string",
+            "defaultValue": "10.11.0.0/24",
+            "metadata": {
+                "description": "Subnet Outside address prefix"
+            }
+        },
+        "subnetOutsideName": {
+            "type": "string",
+            "defaultValue": "subnetOutside",
+            "metadata": {
+                "description": "Subnet Outside Name"
+            }
+        },
+        "vnetInsideName": {
+            "type": "string",
+            "defaultValue": "VnetInside",
+            "metadata": {
+                "description": "VNet Inside name"
+            }
+        },
+        "vnetInsideAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.10.0.0/21",
+            "metadata": {
+                "description": "VNet Inside address prefix"
+            }
+        },
+        "subnetInsidePrefix": {
+            "type": "string",
+            "defaultValue": "10.10.0.0/24",
+            "metadata": {
+                "description": "Subnet Inside address prefix"
+            }
+        },
+        "subnetInsideName": {
+            "type": "string",
+            "defaultValue": "subnetInside",
+            "metadata": {
+                "description": "Subnet Inside name"
+            }
+        },
+        "networkSecurityGroupRules": {
+            "type": "array"
+        },
+        "virtualMachineInsideName": {
+            "type": "string",
+            "defaultValue": "VMInside"
+        },
+        "adminUsernameInside": {
+            "type": "string",
+            "defaultValue": "asm2782"
+        },
+        "adminPasswordInside": {
+            "type": "secureString"
+        }
+    },
+    "variables": {
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-09-01",
+            "name": "VnetsDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVnets.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetTransitName": {
+                        "value": "[parameters('vnetTransitName')]"
+                    },
+                    "vnetTransitAddressPrefix": {
+                        "value": "[parameters('vnetTransitAddressPrefix')]"
+                    },
+                    "subnetMgmtPrefix": {
+                        "value": "[parameters('subnetMgmtPrefix')]"
+                    },
+                    "subnetMgmtName": {
+                        "value": "[parameters('subnetMgmtName')]"
+                    },
+                    "subnetUntrustedPrefix": {
+                        "value": "[parameters('subnetUntrustedPrefix')]"
+                    },
+                    "subnetUntrustedName": {
+                        "value": "[parameters('subnetUntrustedName')]"
+                    },
+                    "subnetTrustedPrefix": {
+                        "value": "[parameters('subnetTrustedPrefix')]"
+                    },
+                    "subnetTrustedName": {
+                        "value": "[parameters('subnetTrustedName')]"
+                    },
+                    "subnetHA2Prefix": {
+                        "value": "[parameters('subnetHA2Prefix')]"
+                    },
+                    "subnetHA2Name": {
+                        "value": "[parameters('subnetHA2Name')]"
+                    },
+                    "vnetOutsideName": {
+                        "value": "[parameters('vnetOutsideName')]"
+                    },
+                    "vnetOutsideAddressPrefix": {
+                        "value": "[parameters('vnetOutsideAddressPrefix')]"
+                    },
+                    "subnetOutsidePrefix": {
+                        "value": "[parameters('subnetOutsidePrefix')]"
+                    },
+                    "subnetOutsideName": {
+                        "value": "[parameters('subnetOutsideName')]"
+                    },
+                    "vnetInsideName": {
+                        "value": "[parameters('vnetInsideName')]"
+                    },
+                    "vnetInsideAddressPrefix": {
+                        "value": "[parameters('vnetInsideAddressPrefix')]"
+                    },
+                    "subnetInsidePrefix": {
+                        "value": "[parameters('subnetInsidePrefix')]"
+                    },
+                    "subnetInsideName": {
+                        "value": "[parameters('subnetInsideName')]"
+                    },
+                    "networkSecurityGroupRules": {
+                        "value": "[parameters('networkSecurityGroupRules')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2016-09-01",
+            "name": "VMInsideDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVM.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualMachineName": {
+                        "value": "[parameters('virtualMachineInsideName')]"
+                    },
+                    "virtualNetwork": {
+                        "value": "[parameters('vnetInsideName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetInsideName')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsernameInside')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPasswordInside')]"
+                    }
+                }
+            }
+        }
+    ]
+}
