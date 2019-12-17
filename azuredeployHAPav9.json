@@ -21,6 +21,22 @@
                     "contentVersion": "1.0.0.0"
                 }
             }
+        },
+                {
+            "apiVersion": "2016-09-01",
+            "name": "VMInsideDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVM.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVMInside.parameters.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
         }
     ]
 }
