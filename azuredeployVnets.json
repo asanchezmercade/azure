@@ -206,6 +206,9 @@
 			"type": "Microsoft.Network/virtualNetworks",
 			"name": "[parameters('vnetTransitName')]",
 			"location": "[variables('location')]",
+								"dependsOn": [
+						"[concat('Microsoft.Network/networkSecurityGroups/', 'networkSecurityGroup')]"
+					],
 			"properties": {
 				"addressSpace": {
 					"addressPrefixes": [
@@ -283,7 +286,8 @@
 			"name": "[parameters('vnetInsideName')]",
 			"location": "[variables('location')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/routeTables/', 'routeTableInsideName')]"
+				"[concat('Microsoft.Network/routeTables/', 'routeTableInsideName')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', 'networkSecurityGroup')]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -331,7 +335,8 @@
 			"name": "[parameters('vnetOutsideName')]",
 			"location": "[variables('location')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/routeTables/', 'routeTableOutsideName')]"
+				"[concat('Microsoft.Network/routeTables/', 'routeTableOutsideName')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', 'networkSecurityGroup')]"
 			],
 			"properties": {
 				"addressSpace": {
