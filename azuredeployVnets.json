@@ -137,6 +137,7 @@
 		"VnetInsideToTransitVnetPeeringName": "[concat(parameters('vNetInsideName'), '-', parameters('vnetTransitName'))]",
 		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
 		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetTransitName'))]",
+		"networkSecurityGroupName": "NSGPermitSSH",
 		"location": "[resourceGroup().location]"
 	},
 	"resources": [
@@ -194,7 +195,7 @@
 		},
 		{
 			"apiVersion": "2019-09-01",
-			"name": "networkSecurityGroup",
+			"name": "[variables('networkSecurityGroupName')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"location": "[variables('location')]",
 			"properties": {
@@ -206,9 +207,9 @@
 			"type": "Microsoft.Network/virtualNetworks",
 			"name": "[parameters('vnetTransitName')]",
 			"location": "[variables('location')]",
-								"dependsOn": [
-						"[concat('Microsoft.Network/networkSecurityGroups/', 'networkSecurityGroup')]"
-					],
+			"dependsOn": [
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+			],
 			"properties": {
 				"addressSpace": {
 					"addressPrefixes": [
@@ -221,7 +222,7 @@
 						"properties": {
 							"addressPrefix": "[parameters('subnetMgmtPrefix')]",
 							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
 							}
 						}
 					},
@@ -287,7 +288,7 @@
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/routeTables/', 'routeTableInsideName')]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', 'networkSecurityGroup')]"
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -304,7 +305,7 @@
 								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableInsideName')]"
 							},
 							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
 							}
 						}
 					}
@@ -336,7 +337,7 @@
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/routeTables/', 'routeTableOutsideName')]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', 'networkSecurityGroup')]"
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -353,7 +354,7 @@
 								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableOutsideName')]"
 							},
 							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'networkSecurityGroup')]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
 							}
 						}
 					}
