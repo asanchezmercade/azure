@@ -112,7 +112,8 @@
 						"name": "ipconfig-mgmt",
 						"properties": {
 							"subnet": {
-								"id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]"
+								/* "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]" */
+								"id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('subnetMgmtName'))]"
 							},
 							"privateIPAllocationMethod": "Dynamic",
 							"publicIPAddress": {
