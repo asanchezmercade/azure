@@ -1,0 +1,271 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"virtualNetworkName": {
+			"type": "string"
+		},
+		"subnetMgmtName": {
+			"type": "string"
+		},
+		"subnetUntrustedName": {
+			"type": "string"
+		},
+		"subnetTrustedName": {
+			"type": "string"
+		},
+		"subnetHA2Name": {
+			"type": "string"
+		},
+		"vmName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of VM-Series VM in the Azure portal"
+			}
+		},
+		"imageVersion": {
+			"type": "string",
+			"allowedValues": [
+				"latest",
+				"9.0.4",
+				"8.1.9",
+				"8.0.17"
+			],
+			"metadata": {
+				"description": "Version number of VM-Series VM in the Azure portal"
+			},
+			"defaultValue": "latest"
+		},
+		"vmSize": {
+			"type": "string",
+			"allowedValues": [
+				"Standard_D3_v2",
+				"Standard_D4_v2",
+				"Standard_D5_v2",
+				"Standard_D4_v3",
+				"Standard_D16_v3",
+				"Standard_DS3_v2",
+				"Standard_DS4_v2",
+				"Standard_DS5_v2"
+			],
+			"metadata": {
+				"description": "Azure VM size for VM-Series"
+			},
+			"defaultValue": "Standard_D3_v2"
+		},
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Username of the administrator account of VM-Series"
+			}
+		},
+		"adminPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Password for the administrator account of VM-Series."
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]",
+		"publicIpAddressName": "[concat(parameters('vmName'), '-Mgmt-PublicIP')]",
+		"imagePublisher": "paloaltonetworks",
+		"imageSku": "bundle1",
+		"imageOffer": "vmseries1",
+		"nicName": "[concat(parameters('vmName'), '-Eth1-')]"
+	},
+	"resources": [
+		/* {
+			"apiVersion": "2017-05-10",
+			"name": "pid-5C789549-0D4A-46A4-BF95-51CDED58B0F0",
+			"type": "Microsoft.Resources/deployments",
+			"properties": {
+				"mode": "Incremental",
+				"template": {
+					"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+					"contentVersion": "1.0.0.0",
+					"resources": [
+					]
+				}
+			}
+		}, */
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[variables('publicIpAddressName')]",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"location": "[variables('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic"
+			}
+		},
+		{
+			"comments": "FW Management Network Interface",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2019-09-01",
+			"name": "[concat(parameters('vmName'), '-Mgmt')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+			],
+			"location": "[variables('location')]",
+			"properties": {
+				"ipConfigurations": [
+					{
+						"name": "ipconfig-mgmt",
+						"properties": {
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]"
+							},
+							"privateIPAllocationMethod": "Dynamic",
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"comments": "FW Management Network Interface",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2019-09-01",
+			"name": "[concat(variables('nicName'), '1')]",
+			"location": "[variables('location')]",
+			"properties": {
+				"enableIPForwarding": true,
+				"enableAcceleratedNetworking": "[if(equals(parameters('imageVersion'), 'latest'), 'true', if(equals(parameters('imageVersion'), '9.0.4'), 'true', 'false'))]",
+				"ipConfigurations": [
+					{
+						"name": "ipconfig-untrust",
+						"properties": {
+							"primary": true,
+							"privateIPAllocationMethod": "Dynamic",
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
+							}
+						}
+					},
+					{
+						"comments": "Assign a secondary IP to Unrusted Network Interface",
+						"name": "ipconfig-untrust-secondary",
+						"properties": {
+							"privateIPAllocationMethod": "Static",
+							"privateIPAddress": "10.9.1.100",
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
+							}
+						}
+					},
+				]
+			}
+		},
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[concat(variables('nicName'), '2')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"location": "[variables('location')]",
+			"properties": {
+				"enableIPForwarding": true,
+				"enableAcceleratedNetworking": "[if(equals(parameters('imageVersion'), 'latest'), 'true', if(equals(parameters('imageVersion'), '9.0.4'), 'true', 'false'))]",
+				"ipConfigurations": [
+					{
+						"name": "ipconfig-trust",
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetTrustedName'))]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[concat(variables('nicName'), '3')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"location": "[variables('location')]",
+			"properties": {
+				"enableIPForwarding": true,
+				"enableAcceleratedNetworking": "[if(equals(parameters('imageVersion'), 'latest'), 'true', if(equals(parameters('imageVersion'), '9.0.4'), 'true', 'false'))]",
+				"ipConfigurations": [
+					{
+						"name": "ipconfig-ha2",
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetHA2Name'))]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"apiVersion": "2019-03-01",
+			"name": "[parameters('vmName')]",
+			"type": "Microsoft.Compute/virtualMachines",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
+				"[concat(parameters('vmName'), '-Mgmt')]",
+				"[concat(variables('nicName'), '1')]",
+				"[concat(variables('nicName'), '2')]",
+				"[concat(variables('nicName'), '3')]"
+			],
+			"location": "[variables('location')]",
+			"plan": {
+				"name": "[variables('imageSku')]",
+				"product": "[variables('imageOffer')]",
+				"publisher": "[variables('imagePublisher')]"
+			},
+			"properties": {
+				"hardwareProfile": {
+					"vmSize": "[parameters('vmSize')]"
+				},
+				"osProfile": {
+					"computerName": "[parameters('vmName')]",
+					"adminUsername": "[parameters('adminUsername')]",
+					"adminPassword": "[parameters('adminPassword')]"
+				},
+				"storageProfile": {
+					"imageReference": {
+						"publisher": "[variables('imagePublisher')]",
+						"offer": "[variables('imageOffer')]",
+						"sku": "[variables('imageSku')]",
+						"version": "[parameters('imageVersion')]"
+					},
+					"osDisk": {
+						"createOption": "FromImage"
+					}
+				},
+				"networkProfile": {
+					"networkInterfaces": [
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'),'-Mgmt'))]",
+							"properties": {
+								"primary": true
+							}
+						},
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'1'))]",
+							"properties": {
+								"primary": false
+							}
+						},
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'2'))]",
+							"properties": {
+								"primary": false
+							}
+						},
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'3'))]",
+							"properties": {
+								"primary": false
+							}
+						}
+					]
+				}
+			}
+		}
+	]
+}
