@@ -137,6 +137,7 @@
 					{
 						"name": "ipconfig-untrust",
 						"properties": {
+							"primary": true,
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
 								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
