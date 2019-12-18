@@ -107,7 +107,7 @@
 			"type": "Microsoft.Network/networkInterfaces",
 			"dependsOn": [
 				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-				"[concat('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+				"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
@@ -132,7 +132,7 @@
 			"name": "[concat(variables('nicName'), '1')]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"dependsOn": [
-				"[concat('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+				"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
@@ -156,7 +156,7 @@
 			"name": "[concat(variables('nicName'), '2')]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"dependsOn": [
-				"[concat('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+				"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
@@ -180,7 +180,7 @@
 			"name": "[concat(variables('nicName'), '3')]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"dependsOn": [
-				"[concat('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+				"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
@@ -205,7 +205,7 @@
 			"type": "Microsoft.Compute/virtualMachines",
 			"dependsOn": [
 				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-				"[concat('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+				"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 				"[concat(parameters('vmName'), '-Mgmt')]",
 				"[concat(variables('nicName'), '1')]",
 				"[concat(variables('nicName'), '2')]",
