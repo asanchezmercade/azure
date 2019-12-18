@@ -125,9 +125,10 @@
 			}
 		},
 		{
+			"comments": "FW Management Network Interface",
+			"type": "Microsoft.Network/networkInterfaces",
 			"apiVersion": "2019-09-01",
 			"name": "[concat(variables('nicName'), '1')]",
-			"type": "Microsoft.Network/networkInterfaces",
 			"location": "[variables('location')]",
 			"properties": {
 				"enableIPForwarding": true,
@@ -141,7 +142,18 @@
 								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
 							}
 						}
-					}
+					},
+					{
+						"comments": "Assign a secondary IP to Unrusted Network Interface",
+						"name": "ipconfig-untrust-secondary",
+						"properties": {
+							"privateIPAllocationMethod": "Static",
+							"privateIPAddress": "10.9.1.100",
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
+							}
+						}
+					},
 				]
 			}
 		},

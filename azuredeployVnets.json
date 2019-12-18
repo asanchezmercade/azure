@@ -137,7 +137,7 @@
 		"VnetInsideToTransitVnetPeeringName": "[concat(parameters('vNetInsideName'), '-', parameters('vnetTransitName'))]",
 		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
 		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetTransitName'))]",
-		"networkSecurityGroupName": "NSGPermitSSH",
+		"networkSecurityGroupName": "NSGPermitSSHandHTTPS",
 		"location": "[resourceGroup().location]"
 	},
 	"resources": [
