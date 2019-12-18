@@ -321,7 +321,7 @@
                     "subnetTrustedName": {
                         "value": "[parameters('subnetTrustedName')]"
                     },
-                    "subnetHA2dName": {
+                    "subnetHA2Name": {
                         "value": "[parameters('subnetHA2Name')]"
                     },
                     "vmName": {
