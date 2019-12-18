@@ -72,7 +72,7 @@
 		"imagePublisher": "paloaltonetworks",
 		"imageSku": "bundle1",
 		"imageOffer": "vmseries1",
-		"nicName": "[concat(parameters('vmName'), '-Eth1/')]"
+		"nicName": "[concat(parameters('vmName'), '-Eth1-')]"
 	},
 	"resources": [
 		/* {
