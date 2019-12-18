@@ -145,7 +145,6 @@
 						}
 					},
 					{
-						"comments": "Assign a secondary IP to Unrusted Network Interface",
 						"name": "ipconfig-untrust-secondary",
 						"properties": {
 							"privateIPAllocationMethod": "Static",
