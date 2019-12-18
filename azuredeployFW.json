@@ -159,7 +159,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[parameters('subnetTrustedName')]"
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetTrustedName'))]"
 							}
 						}
 					}
@@ -180,7 +180,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[parameters('subnetHA2Name')]"
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetHA2Name'))]"
 							}
 						}
 					}
