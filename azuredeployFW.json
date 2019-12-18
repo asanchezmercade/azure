@@ -154,7 +154,7 @@
 								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
 							}
 						}
-					},
+					}
 				]
 			}
 		},
