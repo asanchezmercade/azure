@@ -95,13 +95,14 @@
 			"type": "Microsoft.Network/publicIPAddresses",
 			"location": "[variables('location')]",
 			"properties": {
-				"publicIPAllocationMethod": "Dynamic",
+				"publicIPAllocationMethod": "Dynamic"
 			}
 		},
 		{
+			"comments": "FW Management Network Interface",
+			"type": "Microsoft.Network/networkInterfaces",
 			"apiVersion": "2019-09-01",
 			"name": "[concat(parameters('vmName'), '-Mgmt')]",
-			"type": "Microsoft.Network/networkInterfaces",
 			"dependsOn": [
 				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
 			],
@@ -112,12 +113,11 @@
 						"name": "ipconfig-mgmt",
 						"properties": {
 							"subnet": {
-								/* "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]" */
-								"id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('subnetMgmtName'))]"
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]"
 							},
 							"privateIPAllocationMethod": "Dynamic",
 							"publicIPAddress": {
-								"id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
 							}
 						}
 					}
