@@ -158,6 +158,12 @@
             "metadata": {
                 "description": "Admin password VMInside"
             }
+        },
+        "adminPasswordFW1": {
+            "type": "secureString",
+            "metadata": {
+                "description": "Admin password FW1"
+            }
         }
     },
     "variables": {
@@ -291,7 +297,44 @@
                     }
                 }
             }
+        },
+        {
+            "apiVersion": "2016-09-01",
+            "name": "FW1Deployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployFW.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[parameters('vnetTransitName')]"
+                    },
+                    "subnetMgmtName": {
+                        "value": "[parameters('subnetMgmtName')]"
+                    },
+                    "subnetUntrustedName": {
+                        "value": "[parameters('subnetUntrustedName')]"
+                    },
+                    "subnetTrustedName": {
+                        "value": "[parameters('subnetTrustedName')]"
+                    },
+                    "subnetHA2dName": {
+                        "value": "[parameters('subnetHA2Name')]"
+                    },
+                    "vmName": {
+                        "value": "FW1"
+                    },
+                    "adminUsername": {
+                        "value": "asm2782"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPasswordFW1')]"
+                    }
+                }
+            }
         }
-
     ]
 }
