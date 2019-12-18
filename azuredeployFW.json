@@ -104,7 +104,8 @@
 			"apiVersion": "2019-09-01",
 			"name": "[concat(parameters('vmName'), '-Mgmt')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
+				"[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
@@ -129,6 +130,9 @@
 			"type": "Microsoft.Network/networkInterfaces",
 			"apiVersion": "2019-09-01",
 			"name": "[concat(variables('nicName'), '1')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetUntrustedName'))]"
+			],
 			"location": "[variables('location')]",
 			"properties": {
 				"enableIPForwarding": true,
@@ -161,6 +165,9 @@
 			"apiVersion": "2019-09-01",
 			"name": "[concat(variables('nicName'), '2')]",
 			"type": "Microsoft.Network/networkInterfaces",
+						"dependsOn": [
+				"[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetTrustedName'))]"
+			],
 			"location": "[variables('location')]",
 			"properties": {
 				"enableIPForwarding": true,
@@ -182,6 +189,9 @@
 			"apiVersion": "2019-09-01",
 			"name": "[concat(variables('nicName'), '3')]",
 			"type": "Microsoft.Network/networkInterfaces",
+						"dependsOn": [
+				"[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetHA2Name'))]"
+			],
 			"location": "[variables('location')]",
 			"properties": {
 				"enableIPForwarding": true,
