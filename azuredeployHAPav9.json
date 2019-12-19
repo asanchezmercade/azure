@@ -244,6 +244,9 @@
             "apiVersion": "2016-09-01",
             "name": "VMInsideDeployment",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'VnetsDeployment')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -273,6 +276,9 @@
             "apiVersion": "2016-09-01",
             "name": "VMOutsideDeployment",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'VnetsDeployment')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -302,6 +308,9 @@
             "apiVersion": "2016-09-01",
             "name": "FW1Deployment",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'VnetsDeployment')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
