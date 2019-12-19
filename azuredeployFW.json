@@ -104,8 +104,7 @@
 			"apiVersion": "2019-09-01",
 			"name": "[concat(parameters('vmName'), '-Mgmt')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-				"[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetMgmtName'))]"
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
