@@ -34,7 +34,7 @@
                     "name": "ICMP",
                     "properties": {
                         "priority": 320,
-                        "protocol": "ICMP",
+                        "protocol": "ICMP_IN",
                         "access": "Allow",
                         "direction": "Inbound",
                         "sourceAddressPrefix": "*",
@@ -47,7 +47,7 @@
                     "name": "ICMP",
                     "properties": {
                         "priority": 320,
-                        "protocol": "ICMP",
+                        "protocol": "ICMP_OUT",
                         "access": "Allow",
                         "direction": "Outbound",
                         "sourceAddressPrefix": "*",
