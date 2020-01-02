@@ -29,6 +29,32 @@
                         "destinationAddressPrefix": "*",
                         "destinationPortRange": "443"
                     }
+                },
+                {
+                    "name": "ICMP",
+                    "properties": {
+                        "priority": 320,
+                        "protocol": "ICMP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "*"
+                    }
+                },
+                {
+                    "name": "ICMP",
+                    "properties": {
+                        "priority": 320,
+                        "protocol": "ICMP",
+                        "access": "Allow",
+                        "direction": "Outbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "*"
+                    }
                 }
             ]
         }

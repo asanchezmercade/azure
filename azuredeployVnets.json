@@ -138,6 +138,7 @@
 		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
 		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetTransitName'))]",
 		"networkSecurityGroupName": "NSGPermitSSHandHTTPS",
+		"networkSecurityGroupNameSubnetInside": "NSGSubnetInside",
 		"location": "[resourceGroup().location]"
 	},
 	"resources": [
@@ -196,6 +197,15 @@
 		{
 			"apiVersion": "2019-09-01",
 			"name": "[variables('networkSecurityGroupName')]",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"location": "[variables('location')]",
+			"properties": {
+				"securityRules": "[parameters('networkSecurityGroupRules')]"
+			}
+		},
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[variables('networkSecurityGroupNameSubnetInside')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"location": "[variables('location')]",
 			"properties": {
@@ -288,7 +298,7 @@
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/routeTables/', 'routeTableInside')]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupNameSubnetInside'))]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -305,7 +315,7 @@
 								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableInside')]"
 							},
 							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupNameSubnetInside'))]"
 							}
 						}
 					}
