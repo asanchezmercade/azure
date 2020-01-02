@@ -169,6 +169,7 @@
 					{
 						"name": "ipconfig-trust",
 						"properties": {
+							"primary": true,
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
 								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetTrustedName'))]"
