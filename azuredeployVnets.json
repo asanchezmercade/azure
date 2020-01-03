@@ -150,19 +150,11 @@
 			"properties": {
 				"routes": [
 					{
-						"name": "toTransit-Vnet",
-						"properties": {
-							"addressPrefix": "[parameters('vnetTransitAddressPrefix')]",
-							"nextHopType": "VirtualAppliance",
-							"nextHopIpAddress": "10.9.2.100"
-						}
-					},
-					{
 						"name": "tovNetOutside",
 						"properties": {
 							"addressPrefix": "[parameters('vnetOutsideAddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
-							"nextHopIpAddress": "10.9.2.100"
+							"nextHopIpAddress": "10.9.2.4"
 						}
 					}
 				]
@@ -176,19 +168,11 @@
 			"properties": {
 				"routes": [
 					{
-						"name": "toTransit-Vnet",
-						"properties": {
-							"addressPrefix": "[parameters('vnetTransitAddressPrefix')]",
-							"nextHopType": "VirtualAppliance",
-							"nextHopIpAddress": "10.9.1.100"
-						}
-					},
-					{
 						"name": "tovNetInside",
 						"properties": {
 							"addressPrefix": "[parameters('vnetInsideAddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
-							"nextHopIpAddress": "10.9.1.100"
+							"nextHopIpAddress": "10.9.1.4"
 						}
 					}
 				]
