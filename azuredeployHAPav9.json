@@ -102,7 +102,7 @@
         },
         "vnetSubscriber1Name": {
             "type": "string",
-            "defaultValue": "Vnet Subscriber1",
+            "defaultValue": "VnetSubscriber1",
             "metadata": {
                 "description": "VNet Subscriber1 name"
             }
@@ -128,6 +128,34 @@
                 "description": "Subnet Subscriber1 name"
             }
         },
+                "vnetSubscriber2Name": {
+            "type": "string",
+            "defaultValue": "Vnet Subscriber2",
+            "metadata": {
+                "description": "VNet Subscriber2 name"
+            }
+        },
+        "vnetSubscriber2AddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.10.1.0/24",
+            "metadata": {
+                "description": "VNet Subscriber2 address prefix"
+            }
+        },
+        "subnetSubscriber2Prefix": {
+            "type": "string",
+            "defaultValue": "10.10.1.0/25",
+            "metadata": {
+                "description": "Subnet Subscriber2 address prefix"
+            }
+        },
+        "subnetSubscriber2Name": {
+            "type": "string",
+            "defaultValue": "subnetSubscriber2",
+            "metadata": {
+                "description": "Subnet Subscriber2 name"
+            }
+        },
         "NSGGroupRulesMgmtVM": {
             "type": "array"
         },
@@ -146,6 +174,20 @@
             "type": "secureString",
             "metadata": {
                 "description": "Admin password VMSubscriber1"
+            }
+        },
+                "virtualMachineSubscriber2Name": {
+            "type": "string",
+            "defaultValue": "VMSubscriber2"
+        },
+        "adminUsernameSubscriber2": {
+            "type": "string",
+            "defaultValue": "asm2782"
+        },
+        "adminPasswordSubscriber2": {
+            "type": "secureString",
+            "metadata": {
+                "description": "Admin password VMSubscriber2"
             }
         },
         "virtualMachineOutsideName": {
@@ -235,7 +277,19 @@
                         "value": "[parameters('subnetSubscriber1Prefix')]"
                     },
                     "subnetSubscriber1Name": {
-                        "value": "[parameters('subnetSubscriber1Name')]"
+                        "value": "[parameters('subnetSubscriber2Name')]"
+                    },
+                    "vnetSubscriber2Name": {
+                        "value": "[parameters('vnetSubscriber2Name')]"
+                    },
+                    "vnetSubscriber2AddressPrefix": {
+                        "value": "[parameters('vnetSubscriber2AddressPrefix')]"
+                    },
+                    "subnetSubscriber2Prefix": {
+                        "value": "[parameters('subnetSubscriber2Prefix')]"
+                    },
+                    "subnetSubscriber2Name": {
+                        "value": "[parameters('subnetSubscriber2Name')]"
                     },
                     "networkSecurityGroupRulesMgmtFW": {
                         "value": "[parameters('NSGGroupRulesMgmtFW')]"
@@ -274,6 +328,38 @@
                     },
                     "adminPassword": {
                         "value": "[parameters('adminPasswordSubscriber1')]"
+                    }
+                }
+            }
+        },
+                {
+            "apiVersion": "2016-09-01",
+            "name": "VMSubscriber2Deployment",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'VnetsDeployment')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVM.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualMachineName": {
+                        "value": "[parameters('virtualMachineSubscriber2Name')]"
+                    },
+                    "virtualNetwork": {
+                        "value": "[parameters('vnetSubscriber2Name')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetSubscriber2Name')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsernameSubscriber2')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPasswordSubscriber2')]"
                     }
                 }
             }
