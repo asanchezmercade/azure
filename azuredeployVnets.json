@@ -269,8 +269,8 @@
 					],
 					"comments": "This is the peering from Transit-Vnet 1 to vNetOutside",
 					"properties": {
+						"allowForwardedTraffic": true,
 						"remoteVirtualNetwork": {
-							"allowForwardedTraffic": true,
 							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetOutsideName'))]"
 						}
 					}
@@ -369,8 +369,8 @@
 					],
 					"comments": "This is the peering from vNetOutside to Transit-Vnet",
 					"properties": {
+						"allowForwardedTraffic": true,
 						"remoteVirtualNetwork": {
-							"allowForwardedTraffic": true,
 							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetTransitName'))]"
 						}
 					}
