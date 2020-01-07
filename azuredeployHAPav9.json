@@ -148,20 +148,6 @@
                 "description": "Admin password VMSubscriber1"
             }
         },
-        "virtualMachineSubscriber2Name": {
-            "type": "string",
-            "defaultValue": "VMSubscriber2"
-        },
-        "adminUsernameSubscriber2": {
-            "type": "string",
-            "defaultValue": "asm2782"
-        },
-        "adminPasswordSubscriber2": {
-            "type": "secureString",
-            "metadata": {
-                "description": "Admin password VMSubscriber2"
-            }
-        },
         "virtualMachineOutsideName": {
             "type": "string",
             "defaultValue": "VMOutside"
@@ -249,19 +235,7 @@
                         "value": "[parameters('subnetSubscriber1Prefix')]"
                     },
                     "subnetSubscriber1Name": {
-                        "value": "[parameters('subnetSubscriber2Name')]"
-                    },
-                    "vnetSubscriber2Name": {
-                        "value": "[parameters('vnetSubscriber2Name')]"
-                    },
-                    "vnetSubscriber2AddressPrefix": {
-                        "value": "[parameters('vnetSubscriber2AddressPrefix')]"
-                    },
-                    "subnetSubscriber2Prefix": {
-                        "value": "[parameters('subnetSubscriber2Prefix')]"
-                    },
-                    "subnetSubscriber2Name": {
-                        "value": "[parameters('subnetSubscriber2Name')]"
+                        "value": "[parameters('subnetSubscriber1Name')]"
                     },
                     "networkSecurityGroupRulesMgmtFW": {
                         "value": "[parameters('NSGGroupRulesMgmtFW')]"
@@ -300,38 +274,6 @@
                     },
                     "adminPassword": {
                         "value": "[parameters('adminPasswordSubscriber1')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2016-09-01",
-            "name": "VMSubscriber2Deployment",
-            "type": "Microsoft.Resources/deployments",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'VnetsDeployment')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/asanchezmercade/azure/master/azuredeployVM.json",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "virtualMachineName": {
-                        "value": "[parameters('virtualMachineSubscriber2Name')]"
-                    },
-                    "virtualNetwork": {
-                        "value": "[parameters('vnetSubscriber2Name')]"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('subnetSubscriber2Name')]"
-                    },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsernameSubscriber2')]"
-                    },
-                    "adminPassword": {
-                        "value": "[parameters('adminPasswordSubscriber2')]"
                     }
                 }
             }
