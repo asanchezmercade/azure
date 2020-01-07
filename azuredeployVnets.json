@@ -317,7 +317,7 @@
 		{
 			"apiVersion": "2018-10-01",
 			"type": "Microsoft.Network/virtualNetworks",
-			"name": "[parameters('vnetSubscriber1AddressPrefix')]",
+			"name": "[parameters('vnetSubscriber1Name')]",
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/routeTables/', 'routeTableSubscriber1')]",
