@@ -128,6 +128,9 @@
                 "description": "Subnet Inside name"
             }
         },
+        "NSGGroupRulesMgmtVM": {
+            "type": "array"
+        },
         "NSGGroupRulesMgmtFW": {
             "type": "array"
         },
@@ -234,8 +237,11 @@
                     "subnetInsideName": {
                         "value": "[parameters('subnetInsideName')]"
                     },
-                    "networkSecurityGroupRules": {
+                    "networkSecurityGroupRulesMgmtFW": {
                         "value": "[parameters('NSGGroupRulesMgmtFW')]"
+                    },
+                    "networkSecurityGroupRulesMgmtVM": {
+                        "value": "[parameters('NSGGroupRulesMgmtVM')]"
                     }
                 }
             }
