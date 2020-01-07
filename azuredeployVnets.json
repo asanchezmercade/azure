@@ -128,6 +128,34 @@
 				"description": "Subnet Susbscriber1 Name"
 			}
 		},
+		"vnetSubscriber2Name": {
+			"type": "string",
+			"defaultValue": "VnetSubscriber2",
+			"metadata": {
+				"description": "VNet name"
+			}
+		},
+		"vnetSubscriber2AddressPrefix": {
+			"type": "string",
+			"defaultValue": "10.10.1.0/24",
+			"metadata": {
+				"description": "Address prefix"
+			}
+		},
+		"subnetSubscriber2Prefix": {
+			"type": "string",
+			"defaultValue": "10.10.1.0/25",
+			"metadata": {
+				"description": "Subnet Subscriber2 Prefix"
+			}
+		},
+		"subnetSubscriber2Name": {
+			"type": "string",
+			"defaultValue": "subnetSubscriber2",
+			"metadata": {
+				"description": "Subnet Susbscriber2 Name"
+			}
+		},
 		"networkSecurityGroupRulesMgmtFW": {
 			"type": "array"
 		},
@@ -138,12 +166,15 @@
 	"variables": {
 		"TransitVnetToVnetSubscriber1PeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetSubscriber1Name'))]",
 		"VnetSubscriber1ToTransitVnetPeeringName": "[concat(parameters('vnetSubscriber1Name'), '-', parameters('vnetTransitName'))]",
+		"TransitVnetToVnetSubscriber2PeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetSubscriber2Name'))]",
+		"VnetSubscriber2ToTransitVnetPeeringName": "[concat(parameters('vnetSubscriber2Name'), '-', parameters('vnetTransitName'))]",
 		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
 		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetTransitName'))]",
 		"networkSecurityGroupNameSubnetMgmt": "NSGSubnetMgmt",
 		"networkSecurityGroupNameSubnetTrusted": "NSGSubnetTrusted",
 		"networkSecurityGroupNameSubnetUntrusted": "NSGSubnetUntrusted",
 		"networkSecurityGroupNameSubnetSubscriber1": "NSGSubnetSubscriber1",
+		"networkSecurityGroupNameSubnetSubscriber2": "NSGSubnetSubscriber2",
 		"networkSecurityGroupNameSubnetOutside": "NSGSubnetOutside",
 		"location": "[resourceGroup().location]"
 	},
@@ -169,6 +200,24 @@
 		{
 			"apiVersion": "2018-10-01",
 			"type": "Microsoft.Network/routeTables",
+			"name": "routeTableSubscriber2",
+			"location": "[variables('location')]",
+			"properties": {
+				"routes": [
+					{
+						"name": "tovNetOutside",
+						"properties": {
+							"addressPrefix": "[parameters('vnetOutsideAddressPrefix')]",
+							"nextHopType": "VirtualAppliance",
+							"nextHopIpAddress": "10.9.2.4"
+						}
+					}
+				]
+			}
+		},
+		{
+			"apiVersion": "2018-10-01",
+			"type": "Microsoft.Network/routeTables",
 			"name": "routeTableOutside",
 			"location": "[variables('location')]",
 			"properties": {
@@ -177,6 +226,14 @@
 						"name": "tovNetSubscriber1",
 						"properties": {
 							"addressPrefix": "[parameters('vnetSubscriber1AddressPrefix')]",
+							"nextHopType": "VirtualAppliance",
+							"nextHopIpAddress": "10.9.1.4"
+						}
+					},
+					{
+						"name": "tovNetSubscriber2",
+						"properties": {
+							"addressPrefix": "[parameters('vnetSubscriber2AddressPrefix')]",
 							"nextHopType": "VirtualAppliance",
 							"nextHopIpAddress": "10.9.1.4"
 						}
@@ -289,10 +346,26 @@
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetSubscriber1Name'))]"
 					],
-					"comments": "This is the peering from Transit-Vnet to vNetSubscriber1",
+					"comments": "This is the peering from Transit-Vnet to VnetSubscriber1",
 					"properties": {
 						"remoteVirtualNetwork": {
 							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetSubscriber1Name'))]"
+						}
+					}
+				},
+				{
+					"apiVersion": "2018-10-01",
+					"type": "virtualNetworkPeerings",
+					"name": "[variables('TransitVnetToVnetSubscriber2PeeringName')]",
+					"location": "[variables('location')]",
+					"dependsOn": [
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetSubscriber2Name'))]"
+					],
+					"comments": "This is the peering from Transit-Vnet to VnetSubscriber2",
+					"properties": {
+						"remoteVirtualNetwork": {
+							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetSubscriber2Name'))]"
 						}
 					}
 				},
@@ -355,6 +428,56 @@
 						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetSubscriber1Name'))]"
 					],
 					"comments": "This is the peering from vNetSubscriber1 to Transit-Vnet",
+					"properties": {
+						"allowForwardedTraffic": true,
+						"remoteVirtualNetwork": {
+							"id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetTransitName'))]"
+						}
+					}
+				}
+			]
+		},
+				{
+			"apiVersion": "2018-10-01",
+			"type": "Microsoft.Network/virtualNetworks",
+			"name": "[parameters('vnetSubscriber2Name')]",
+			"location": "[variables('location')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/routeTables/', 'routeTableSubscriber2')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupNameSubnetSubscriber2'))]"
+			],
+			"properties": {
+				"addressSpace": {
+					"addressPrefixes": [
+						"[parameters('vnetSubscriber2AddressPrefix')]"
+					]
+				},
+				"subnets": [
+					{
+						"name": "[parameters('subnetSubscriber2Name')]",
+						"properties": {
+							"addressPrefix": "[parameters('subnetSubscriber2Prefix')]",
+							"routeTable": {
+								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableSubscriber2')]"
+							},
+							"networkSecurityGroup": {
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupNameSubnetSubscriber2'))]"
+							}
+						}
+					}
+				]
+			},
+			"resources": [
+				{
+					"apiVersion": "2018-10-01",
+					"type": "virtualNetworkPeerings",
+					"name": "[variables('VnetSubscriber2ToTransitVnetPeeringName')]",
+					"location": "[variables('location')]",
+					"dependsOn": [
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetTransitName'))]",
+						"[concat('Microsoft.Network/virtualNetworks/', parameters('vnetSubscriber2Name'))]"
+					],
+					"comments": "This is the peering from VnetSubscriber2 to Transit-Vnet",
 					"properties": {
 						"allowForwardedTraffic": true,
 						"remoteVirtualNetwork": {
