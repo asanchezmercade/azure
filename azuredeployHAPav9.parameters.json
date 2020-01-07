@@ -2,12 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "networkSecurityGroupRules": {
+        "NSGGroupRulesMgmtFW": {
             "value": [
                 {
-                    "name": "SSH",
+                    "name": "AllowSSHInbound",
                     "properties": {
-                        "priority": 300,
+                        "priority": 100,
                         "protocol": "TCP",
                         "access": "Allow",
                         "direction": "Inbound",
@@ -18,9 +18,9 @@
                     }
                 },
                 {
-                    "name": "HTTPS",
+                    "name": "AllowHTTPSInbound",
                     "properties": {
-                        "priority": 310,
+                        "priority": 200,
                         "protocol": "TCP",
                         "access": "Allow",
                         "direction": "Inbound",
@@ -29,31 +29,22 @@
                         "destinationAddressPrefix": "*",
                         "destinationPortRange": "443"
                     }
-                },
+                }
+            ]
+        },
+        "NSGGroupRulesMgmtVM": {
+            "value": [
                 {
-                    "name": "ICMP_IN",
+                    "name": "AllowSSHInbound",
                     "properties": {
-                        "priority": 320,
-                        "protocol": "ICMP",
+                        "priority": 100,
+                        "protocol": "TCP",
                         "access": "Allow",
                         "direction": "Inbound",
                         "sourceAddressPrefix": "*",
                         "sourcePortRange": "*",
                         "destinationAddressPrefix": "*",
-                        "destinationPortRange": "*"
-                    }
-                },
-                {
-                    "name": "ICMP_OUT",
-                    "properties": {
-                        "priority": 320,
-                        "protocol": "ICMP",
-                        "access": "Allow",
-                        "direction": "Outbound",
-                        "sourceAddressPrefix": "*",
-                        "sourcePortRange": "*",
-                        "destinationAddressPrefix": "*",
-                        "destinationPortRange": "*"
+                        "destinationPortRange": "22"
                     }
                 }
             ]

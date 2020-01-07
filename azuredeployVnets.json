@@ -128,7 +128,10 @@
 				"description": "Subnet Inside Name"
 			}
 		},
-		"networkSecurityGroupRules": {
+		"networkSecurityGroupRulesMgmtFW": {
+			"type": "array"
+		},
+		"networkSecurityGroupRulesMgmtVM": {
 			"type": "array"
 		}
 	},
@@ -137,8 +140,11 @@
 		"VnetInsideToTransitVnetPeeringName": "[concat(parameters('vNetInsideName'), '-', parameters('vnetTransitName'))]",
 		"TransitVnetToVnetOutsidePeeringName": "[concat(parameters('vnetTransitName'), '-', parameters('vnetOutsideName'))]",
 		"VnetOutsideToTransitVnetPeeringName": "[concat(parameters('vNetOutsideName'), '-', parameters('vnetTransitName'))]",
-		"networkSecurityGroupName": "NSGPermitSSHandHTTPS",
+		"networkSecurityGroupNameSubnetMgmt": "NSGSubnetMgmt",
+		"networkSecurityGroupNameSubnetTrusted": "NSGSubnetTrusted",
+		"networkSecurityGroupNameSubnetUntrusted": "NSGSubnetUntrusted",
 		"networkSecurityGroupNameSubnetInside": "NSGSubnetInside",
+		"networkSecurityGroupNameSubnetOutside": "NSGSubnetOutside",
 		"location": "[resourceGroup().location]"
 	},
 	"resources": [
@@ -180,11 +186,27 @@
 		},
 		{
 			"apiVersion": "2019-09-01",
-			"name": "[variables('networkSecurityGroupName')]",
+			"name": "[variables('networkSecurityGroupNameSubnetMgmt')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"location": "[variables('location')]",
 			"properties": {
-				"securityRules": "[parameters('networkSecurityGroupRules')]"
+				"securityRules": "[parameters('networkSecurityGroupRulesMgmtFW')]"
+			}
+		},
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[variables('networkSecurityGroupNameSubnetTrusted')]",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"location": "[variables('location')]",
+			"properties": {
+			}
+		},
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[variables('networkSecurityGroupNameSubnetUntrusted')]",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"location": "[variables('location')]",
+			"properties": {
 			}
 		},
 		{
@@ -193,7 +215,16 @@
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"location": "[variables('location')]",
 			"properties": {
-				"securityRules": "[parameters('networkSecurityGroupRules')]"
+				"securityRules": "[parameters('networkSecurityGroupRulesMgmtVM')]"
+			}
+		},
+		{
+			"apiVersion": "2019-09-01",
+			"name": "[variables('networkSecurityGroupNameSubnetOutside')]",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"location": "[variables('location')]",
+			"properties": {
+				"securityRules": "[parameters('networkSecurityGroupRulesMgmtVM')]"
 			}
 		},
 		{
@@ -202,7 +233,7 @@
 			"name": "[parameters('vnetTransitName')]",
 			"location": "[variables('location')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupNameSubnetMgmt'))]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -216,20 +247,28 @@
 						"properties": {
 							"addressPrefix": "[parameters('subnetMgmtPrefix')]",
 							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupNameSubnetMgmt'))]"
 							}
 						}
 					},
 					{
 						"name": "[parameters('subnetUntrustedName')]",
 						"properties": {
-							"addressPrefix": "[parameters('subnetUntrustedPrefix')]"
+							"addressPrefix": "[parameters('subnetUntrustedPrefix')]",
+							"networkSecurityGroup": {
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupNameSubnetUntrusted'))]"
+							}
+
 						}
 					},
 					{
 						"name": "[parameters('subnetTrustedName')]",
 						"properties": {
-							"addressPrefix": "[parameters('subnetTrustedPrefix')]"
+							"addressPrefix": "[parameters('subnetTrustedPrefix')]",
+							"networkSecurityGroup": {
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupNameSubnetTrusted'))]"
+							}
+
 						}
 					},
 					{
@@ -332,7 +371,7 @@
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/routeTables/', 'routeTableOutside')]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupNameSubnetOutside'))]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -349,7 +388,7 @@
 								"id": "[resourceId('Microsoft.Network/routeTables', 'routeTableOutside')]"
 							},
 							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupNameSubnetOutside'))]"
 							}
 						}
 					}
