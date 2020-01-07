@@ -100,32 +100,32 @@
                 "description": "Subnet Outside Name"
             }
         },
-        "vnetInsideName": {
+        "vnetSubscriber1Name": {
             "type": "string",
-            "defaultValue": "VnetInside",
+            "defaultValue": "Vnet Subscriber1",
             "metadata": {
-                "description": "VNet Inside name"
+                "description": "VNet Subscriber1 name"
             }
         },
-        "vnetInsideAddressPrefix": {
-            "type": "string",
-            "defaultValue": "10.10.0.0/21",
-            "metadata": {
-                "description": "VNet Inside address prefix"
-            }
-        },
-        "subnetInsidePrefix": {
+        "vnetSubscriber1AddressPrefix": {
             "type": "string",
             "defaultValue": "10.10.0.0/24",
             "metadata": {
-                "description": "Subnet Inside address prefix"
+                "description": "VNet Subscriber1 address prefix"
             }
         },
-        "subnetInsideName": {
+        "subnetSubscriber1Prefix": {
             "type": "string",
-            "defaultValue": "subnetInside",
+            "defaultValue": "10.10.0.0/25",
             "metadata": {
-                "description": "Subnet Inside name"
+                "description": "Subnet Subscriber1 address prefix"
+            }
+        },
+        "subnetSubscriber1Name": {
+            "type": "string",
+            "defaultValue": "subnetSubscriber1",
+            "metadata": {
+                "description": "Subnet Subscriber1 name"
             }
         },
         "NSGGroupRulesMgmtVM": {
@@ -134,18 +134,18 @@
         "NSGGroupRulesMgmtFW": {
             "type": "array"
         },
-        "virtualMachineInsideName": {
+        "virtualMachineSubscriber1Name": {
             "type": "string",
-            "defaultValue": "VMInside"
+            "defaultValue": "VMSubscriber1"
         },
-        "adminUsernameInside": {
+        "adminUsernameSubscriber1": {
             "type": "string",
             "defaultValue": "asm2782"
         },
-        "adminPasswordInside": {
+        "adminPasswordSubscriber1": {
             "type": "secureString",
             "metadata": {
-                "description": "Admin password VMInside"
+                "description": "Admin password VMSubscriber1"
             }
         },
         "virtualMachineOutsideName": {
@@ -159,7 +159,7 @@
         "adminPasswordOutside": {
             "type": "secureString",
             "metadata": {
-                "description": "Admin password VMInside"
+                "description": "Admin password VMOutside"
             }
         },
         "adminPasswordFW1": {
@@ -225,17 +225,17 @@
                     "subnetOutsideName": {
                         "value": "[parameters('subnetOutsideName')]"
                     },
-                    "vnetInsideName": {
-                        "value": "[parameters('vnetInsideName')]"
+                    "vnetSubscriber1Name": {
+                        "value": "[parameters('vnetSubscriber1Name')]"
                     },
-                    "vnetInsideAddressPrefix": {
-                        "value": "[parameters('vnetInsideAddressPrefix')]"
+                    "vnetSubscriber1AddressPrefix": {
+                        "value": "[parameters('vnetSubscriber1AddressPrefix')]"
                     },
-                    "subnetInsidePrefix": {
-                        "value": "[parameters('subnetInsidePrefix')]"
+                    "subnetSubscriber1Prefix": {
+                        "value": "[parameters('subnetSubscriber1Prefix')]"
                     },
-                    "subnetInsideName": {
-                        "value": "[parameters('subnetInsideName')]"
+                    "subnetSubscriber1Name": {
+                        "value": "[parameters('subnetSubscriber1Name')]"
                     },
                     "networkSecurityGroupRulesMgmtFW": {
                         "value": "[parameters('NSGGroupRulesMgmtFW')]"
@@ -248,7 +248,7 @@
         },
         {
             "apiVersion": "2016-09-01",
-            "name": "VMInsideDeployment",
+            "name": "VMSubscriber1Deployment",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'VnetsDeployment')]"
@@ -261,19 +261,19 @@
                 },
                 "parameters": {
                     "virtualMachineName": {
-                        "value": "[parameters('virtualMachineInsideName')]"
+                        "value": "[parameters('virtualMachineSubscriber1Name')]"
                     },
                     "virtualNetwork": {
-                        "value": "[parameters('vnetInsideName')]"
+                        "value": "[parameters('vnetSubscriber1Name')]"
                     },
                     "subnetName": {
-                        "value": "[parameters('subnetInsideName')]"
+                        "value": "[parameters('subnetSubscriber1Name')]"
                     },
                     "adminUsername": {
-                        "value": "[parameters('adminUsernameInside')]"
+                        "value": "[parameters('adminUsernameSubscriber1')]"
                     },
                     "adminPassword": {
-                        "value": "[parameters('adminPasswordInside')]"
+                        "value": "[parameters('adminPasswordSubscriber1')]"
                     }
                 }
             }
