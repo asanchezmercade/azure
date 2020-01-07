@@ -128,34 +128,6 @@
                 "description": "Subnet Subscriber1 name"
             }
         },
-                "vnetSubscriber2Name": {
-            "type": "string",
-            "defaultValue": "Vnet Subscriber2",
-            "metadata": {
-                "description": "VNet Subscriber2 name"
-            }
-        },
-        "vnetSubscriber2AddressPrefix": {
-            "type": "string",
-            "defaultValue": "10.10.1.0/24",
-            "metadata": {
-                "description": "VNet Subscriber2 address prefix"
-            }
-        },
-        "subnetSubscriber2Prefix": {
-            "type": "string",
-            "defaultValue": "10.10.1.0/25",
-            "metadata": {
-                "description": "Subnet Subscriber2 address prefix"
-            }
-        },
-        "subnetSubscriber2Name": {
-            "type": "string",
-            "defaultValue": "subnetSubscriber2",
-            "metadata": {
-                "description": "Subnet Subscriber2 name"
-            }
-        },
         "NSGGroupRulesMgmtVM": {
             "type": "array"
         },
@@ -176,7 +148,7 @@
                 "description": "Admin password VMSubscriber1"
             }
         },
-                "virtualMachineSubscriber2Name": {
+        "virtualMachineSubscriber2Name": {
             "type": "string",
             "defaultValue": "VMSubscriber2"
         },
@@ -332,7 +304,7 @@
                 }
             }
         },
-                {
+        {
             "apiVersion": "2016-09-01",
             "name": "VMSubscriber2Deployment",
             "type": "Microsoft.Resources/deployments",
